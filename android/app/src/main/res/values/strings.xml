@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">EasyADB</string>
+    <string name="brand">easyadb</string>
+    <string name="version">ANDROID + TERMINAL</string>
+    <string name="eyebrow">LESS CABLE. MORE FLOW.</string>
+    <string name="headline">Your phone.\nYour terminal.\nConnected.</string>
+    <string name="intro">Wireless debugging, one QR away. Get your phone ready, then let your terminal do the rest.</string>
+    <string name="check_title">CONNECTION CHECK</string>
+    <string name="wifi_ready">Wi-Fi connected</string>
+    <string name="wifi_missing">Connect to Wi-Fi</string>
+    <string name="wifi_detail">Use the same network as your computer.</string>
+    <string name="developer_ready">Developer options enabled</string>
+    <string name="developer_missing">Enable Developer options</string>
+    <string name="developer_detail">Tap Build number 7 times in About phone.</string>
+    <string name="developer_ready_detail">Next, turn on Wireless debugging in Settings.</string>
+    <string name="wifi_button">Wi-Fi settings</string>
+    <string name="about_button">About phone</string>
+    <string name="steps_title">PAIR IN THREE STEPS</string>
+    <string name="step_one_title">Start on your computer</string>
+    <string name="step_one_detail">Run easyadb to display a fresh pairing QR.</string>
+    <string name="step_two_title">Enable wireless debugging</string>
+    <string name="step_two_detail">In Developer options, turn on Wireless debugging and allow your Wi-Fi network.</string>
+    <string name="step_three_title">Scan. Pair. Develop.</string>
+    <string name="step_three_detail">Tap Pair device with QR code in Wireless debugging. Scan the terminal QR with that scanner.</string>
+    <string name="open_settings">Open Developer options</string>
+    <string name="settings_hint">Then choose Wireless debugging → Pair device with QR code.</string>
+    <string name="system_scanner_note">Android handles the scan and pairing in Settings. EasyADB guides setup; the terminal confirms when your phone is connected.</string>
+    <string name="tools_title">MAKE YOURSELF AT HOME</string>
+    <string name="add_tile">Add Quick Settings shortcut</string>
+    <string name="tile_subtitle">Developer options</string>
+    <string name="tile_added">Shortcut added. Swipe down to find EasyADB.</string>
+    <string name="tile_manual">Swipe down, edit your Quick Settings tiles, and drag EasyADB into the panel.</string>
+    <string name="help_button">Connection help</string>
+    <string name="help_title">Let’s get you connected</string>
+    <string name="help_body">The QR must be scanned from Developer options → Wireless debugging → Pair device with QR code, not your regular camera.\n\nNothing appearing? Keep both devices on the same Wi-Fi. VPNs, guest networks, and firewalls can block discovery. On your computer, run easyadb doctor.\n\nPair manually: choose Pair device with pairing code in Settings. On your computer run:\n\neasyadb pair IP:PAIRING_PORT\n\nEnter the six-digit code at the hidden prompt. If needed, run:\n\neasyadb connect IP:CONNECTION_PORT\n\nThe connection port is on the main Wireless debugging page; it differs from the pairing port.\n\nTo remove a computer’s access, tap its name under Paired devices in Settings and choose Forget.</string>
+    <string name="got_it">Got it</string>
+    <string name="settings_unavailable">Open your phone’s Settings manually, then find Developer options.</string>
+    <string name="footer">Android 11+ · No root · No account</string>
+</resources>
+

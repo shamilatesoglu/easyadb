@@ -1,0 +1,10 @@
+/target/
+**/.gradle/
+**/build/
+**/local.properties
+**/.kotlin/
+.idea/
+.DS_Store
+*.iml
+/artifacts/
+
