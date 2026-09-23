@@ -1,10 +1,15 @@
 [package]
 name = "easyadb"
-description = "Scan. Pair. Develop. Wireless Android debugging from your terminal."
+description = "Pair Android devices for wireless ADB by scanning a QR code in your terminal"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "../../README.md"
+keywords = ["adb", "android", "wireless", "qr", "tui"]
+categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
 anyhow = "1"

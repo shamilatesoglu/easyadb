@@ -7,3 +7,5 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT"
 rust-version = "1.88"
+authors = ["M. Samil Atesoglu <m.samilatesoglu@gmail.com>"]
+repository = "https://github.com/shamilatesoglu/easyadb"
