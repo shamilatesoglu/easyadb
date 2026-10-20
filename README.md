@@ -55,16 +55,6 @@ easyadb --demo    # preview the UI without adb
 - Only the device that scanned the current QR is connected automatically.
 - QR expiry does not revoke an existing pairing. Remove it on the phone under **Wireless debugging → Paired devices**.
 
-## Android companion
-
-`android/` contains an optional app that checks Wi-Fi and Developer options state, opens Wireless debugging settings, and adds a Quick Settings tile. It cannot pair on its own; Android does not allow that for regular apps.
-
-```sh
-cd android && ./gradlew :app:assembleDebug
-```
-
-Requires JDK 17 or 21 and Android SDK 36.
-
 ## License
 
 MIT
