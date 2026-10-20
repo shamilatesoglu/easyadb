@@ -1,7 +1,7 @@
 [package]
 name = "easyadb"
 description = "Pair Android devices for wireless ADB by scanning a QR code in your terminal"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT"
 rust-version = "1.88"

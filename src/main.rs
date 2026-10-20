@@ -13,7 +13,7 @@ use adb::Adb;
 #[derive(Parser)]
 #[command(
     version,
-    about = "Scan. Pair. Develop. Wireless ADB without the cable."
+    about = "Pair Android devices for wireless ADB by scanning a QR code"
 )]
 struct Cli {
     /// Android SDK Platform-Tools adb executable

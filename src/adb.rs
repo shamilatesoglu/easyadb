@@ -165,7 +165,16 @@ impl Adb {
             .run(&["pair", &endpoint.to_string()], Some(password))
             .await?;
         if !output.contains("Successfully paired") {
-            bail!("Pairing failed: {output}");
+            // adb prints its prompt before the result; keep only the result.
+            let output = output.trim_start_matches("Enter pairing code:").trim();
+            bail!(
+                "{}",
+                if output.is_empty() {
+                    "adb pair failed"
+                } else {
+                    output
+                }
+            );
         }
         Ok(output)
     }
@@ -173,7 +182,14 @@ impl Adb {
     pub async fn connect(&self, endpoint: SocketAddr) -> Result<String> {
         let output = self.run(&["connect", &endpoint.to_string()], None).await?;
         if !(output.starts_with("connected to ") || output.starts_with("already connected to ")) {
-            bail!("Connection failed: {output}");
+            bail!(
+                "{}",
+                if output.is_empty() {
+                    "adb connect failed"
+                } else {
+                    &output
+                }
+            );
         }
         Ok(output)
     }

@@ -58,8 +58,9 @@ impl Worker {
         self.emit(EventKind::Log(text.into()));
     }
 
+    // The status line shows the reason; the activity log keeps one entry per distinct error.
     fn error(&mut self, error: String) {
-        self.status("Needs attention");
+        self.status(error.clone());
         if self.last_error != error {
             self.log(error.clone());
             self.last_error = error;
@@ -72,7 +73,7 @@ impl Worker {
         let devices = match devices {
             Ok(devices) => devices,
             Err(err) => {
-                self.error(err.to_string());
+                self.error(format!("adb devices failed: {}", reason(&err)));
                 Vec::new()
             }
         };
@@ -84,7 +85,8 @@ impl Worker {
                     services: Vec::new(),
                 }));
                 self.error(format!(
-                    "Discovery: {err}. Use easyadb pair IP:PORT as a fallback."
+                    "Discovery failed: {}. Use easyadb pair IP:PORT instead.",
+                    reason(&err)
                 ));
                 return;
             }
@@ -114,9 +116,9 @@ impl Worker {
                             .is_some_and(|guid| device_service_matches(&d.serial, guid)))
             });
             if connected {
-                self.status("Connected · ready to develop");
+                self.status("Connected");
                 if !self.connected {
-                    self.log("Device is online in ADB. Your development tools can use it now.");
+                    self.log("Device is online in ADB.");
                 }
                 self.connected = true;
                 return;
@@ -128,7 +130,7 @@ impl Worker {
                     self.next_attempt = Instant::now() + Duration::from_secs(10);
                     match self.adb.connect(service.address).await {
                         Ok(_) => self.log("Connection requested; checking ADB device state…"),
-                        Err(err) => self.error(format!("Reconnect: {err}")),
+                        Err(err) => self.error(format!("Reconnect failed: {}", reason(&err))),
                     }
                 }
             }
@@ -140,7 +142,7 @@ impl Worker {
             return;
         }
         if self.attempts >= 3 {
-            self.status("Pairing failed · press r and scan again");
+            self.status(format!("{} · press r and scan again", self.last_error));
             return;
         }
         if Instant::now() < self.next_attempt {
@@ -151,7 +153,7 @@ impl Worker {
             .iter()
             .find(|s| s.kind == ServiceKind::Pairing && s.name == self.session.name)
         {
-            self.status("Phone found · pairing securely…");
+            self.status("Phone found · pairing…");
             self.log(format!("QR scanned. Pairing with {}", service.address));
             self.attempts += 1;
             self.next_attempt = Instant::now() + Duration::from_secs(5);
@@ -167,12 +169,27 @@ impl Worker {
                     self.status("Paired · finding connection port…");
                     self.log("Pairing succeeded. Looking for this phone's ADB connection service.");
                 }
-                Err(err) => self.error(format!("Pairing attempt {}/3: {err}", self.attempts)),
+                Err(err) => self.error(format!(
+                    "Pairing attempt {}/3 failed: {}",
+                    self.attempts,
+                    reason(&err)
+                )),
             }
         } else {
             self.status("Ready to scan");
         }
     }
+}
+
+// ADB errors can span several lines; the last non-empty one usually names the cause.
+fn reason(err: &anyhow::Error) -> String {
+    let text = err.to_string();
+    text.lines()
+        .map(str::trim)
+        .rfind(|line| !line.is_empty())
+        .unwrap_or("unknown error")
+        .trim_end_matches('.')
+        .to_owned()
 }
 
 fn device_service_matches(serial: &str, name: &str) -> bool {
@@ -214,7 +231,7 @@ pub async fn run(
                 worker.status("Connecting selected device…");
                 match worker.adb.connect(address).await {
                     Ok(message) => worker.log(message),
-                    Err(err) => worker.error(err.to_string()),
+                    Err(err) => worker.error(format!("Connect failed: {}", reason(&err))),
                 }
             }
             _ = interval.tick() => {
@@ -333,6 +350,10 @@ mod tests {
             worker.refresh().await;
         }
         assert_eq!(worker.attempts, 3);
+        assert_eq!(
+            worker.last_error,
+            "Pairing attempt 3/3 failed: Failed to pair"
+        );
         assert!(worker.paired_ip.is_none());
         assert!(!dir.path().join("connected").exists());
     }

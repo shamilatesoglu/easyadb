@@ -178,16 +178,16 @@ fn draw(frame: &mut Frame, app: &App) {
     let qr_width = app.qr[0].chars().count() as u16;
     let qr_height = app.qr.len() as u16;
     let min_width = qr_width + 44;
-    let min_height = qr_height + 17;
+    let min_height = qr_height + 16;
     if area.width < min_width || area.height < min_height {
         frame.render_widget(Paragraph::new(format!(
-            "easyadb\n\nA little more room to scan.\nResize to at least {min_width} × {min_height} cells.\nCurrent: {} × {}\n\nReduce your terminal font size, or use:\neasyadb pair IP:PAIRING_PORT\n\nq quit", area.width, area.height
+            "easyadb\n\nTerminal too small for the QR code.\nResize to at least {min_width} × {min_height} cells.\nCurrent: {} × {}\n\nReduce your terminal font size, or use:\neasyadb pair IP:PAIRING_PORT\n\nq quit", area.width, area.height
         )).style(Style::default().fg(INK)).wrap(Wrap { trim: false }), area.inner(Margin::new(2, 1)));
         return;
     }
     let outer = area.inner(Margin::new(2, 1));
     let sections = Layout::vertical([
-        Constraint::Length(3),
+        Constraint::Length(2),
         Constraint::Min(qr_height + 4),
         Constraint::Length(6),
         Constraint::Length(2),
@@ -199,19 +199,13 @@ fn draw(frame: &mut Frame, app: &App) {
         "   WIRELESS ADB"
     };
     frame.render_widget(
-        Paragraph::new(vec![
-            Line::from(vec![
-                Span::styled(
-                    "◈ easyadb",
-                    Style::default().fg(ACCENT).add_modifier(Modifier::BOLD),
-                ),
-                Span::styled(badge, Style::default().fg(MUTED)),
-            ]),
-            Line::from(Span::styled(
-                "Less cable. More flow.",
-                Style::default().fg(MUTED),
-            )),
-        ]),
+        Paragraph::new(vec![Line::from(vec![
+            Span::styled(
+                "◈ easyadb",
+                Style::default().fg(ACCENT).add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(badge, Style::default().fg(MUTED)),
+        ])]),
         sections[0],
     );
     let body = Layout::horizontal([Constraint::Length(qr_width + 6), Constraint::Min(32)])
@@ -241,7 +235,7 @@ fn draw(frame: &mut Frame, app: &App) {
             "EXPIRED".into()
         } else {
             format!(
-                "FRESH FOR {:02}:{:02}  ·  r regenerate",
+                "EXPIRES IN {:02}:{:02}  ·  r regenerate",
                 remaining / 60,
                 remaining % 60
             )
@@ -369,7 +363,7 @@ fn draw(frame: &mut Frame, app: &App) {
         frame.render_widget(Clear, popup);
         frame.render_widget(Paragraph::new(Text::from(
             "\n  SCAN WITH ANDROID SETTINGS\n\n  Developer options → Wireless debugging → Pair device with QR code.\n  Your normal camera app cannot start ADB pairing.\n\n  NO PHONE APPEARING?\n\n  Use the same Wi-Fi. Guest networks, VPNs, and firewalls can block\n  multicast discovery. Try: easyadb doctor\n\n  PAIR WITHOUT DISCOVERY\n\n  In Settings choose Pair device with pairing code, then run:\n  easyadb pair IP:PAIRING_PORT --connect IP:CONNECTION_PORT\n  The two ports are different. The code is entered at a hidden prompt.\n\n  Pairing secrets stay in memory and expire from this TUI after 3 min.\n  Android keeps the computer trusted until you forget it in Settings.\n\n  Esc / ? close"
-        )).block(block("A LITTLE HELP")).style(Style::default().fg(INK).bg(PANEL)), popup);
+        )).block(block("HELP")).style(Style::default().fg(INK).bg(PANEL)), popup);
     }
 }
 
